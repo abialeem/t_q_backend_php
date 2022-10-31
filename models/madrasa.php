@@ -1,5 +1,5 @@
 <?php
-class Seller
+class Madrasa
 {
     private $conn;
     private $table = 'madrasas';

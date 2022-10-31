@@ -1,5 +1,5 @@
 <?php
-class Seller
+class Principal
 {
     private $conn;
     private $table = 'principals';
