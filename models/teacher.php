@@ -139,7 +139,8 @@ public function addTeacher()
                         madrasa_id = :madrasa_id,
                         courses_count = :courses_count,
                         subjects_count = :subjects_count,
-                        status = :status
+                        status = :status,
+                        updated_at = CURRENT_TIMESTAMP()
                         ';
         $stmt = $this->conn->prepare($query);
         $this->title = htmlspecialchars(strip_tags($this->title));

@@ -44,6 +44,63 @@ public function getSingleStudentById()
     return $stmt;
 }
 
+//check if its_number is registered already
+public function isRegistered()
+    {
+        $query = "SELECT id FROM " . $this->table . " 
+                    WHERE 
+                        its_number = :its_number 
+                        AND deleted_at IS NULL";
+        $stmt = $this->conn->prepare($query);
+        $this->its_number = htmlspecialchars(strip_tags($this->its_number));
+        $stmt->bindParam(':its_number', $this->its_number);
+        $stmt->execute();
+        return $stmt;
+    }
+
+
+//add a new student
+public function addStudent()
+    {
+        $query = 'INSERT INTO ' . $this->table . '
+                    SET
+                        title = :title,
+                        address = :address,
+                        user_id = :user_id,
+                        madrasa_id = :madrasa_id,
+                        course_id = :course_id,
+                        its_number = :its_number,
+                        status = :status,
+                        updated_at = CURRENT_TIMESTAMP()
+                        ';
+        $stmt = $this->conn->prepare($query);
+        $this->title = htmlspecialchars(strip_tags($this->title));
+        $this->address = htmlspecialchars(strip_tags($this->address));
+        $this->user_id = htmlspecialchars(strip_tags($this->user_id));
+        $this->madrasa_id = htmlspecialchars(strip_tags($this->madrasa_id));
+        $this->course_id = htmlspecialchars(strip_tags($this->course_id));
+        $this->its_number = htmlspecialchars(strip_tags($this->its_number));
+        $this->status = htmlspecialchars(strip_tags($this->status));
+        $stmt->bindParam(':title', $this->title);
+        $stmt->bindParam(':address', $this->address);
+        $stmt->bindParam(':user_id', $this->user_id);
+        $stmt->bindParam(':madrasa_id', $this->madrasa_id);
+        $stmt->bindParam(':course_id', $this->course_id);
+        $stmt->bindParam(':its_number', $this->its_number);
+        $stmt->bindParam(':status', $this->status);
+        try {
+            if ($stmt->execute()) {
+                return true;
+            }
+        } catch(Exception $e) {
+            printf('Error: %s.\n', $e);
+            return false;
+        }
+        printf('Error: %s.\n', $stmt->error);
+        return false;
+    }
+
+
 
 }
 

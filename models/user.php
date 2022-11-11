@@ -25,7 +25,7 @@ class User
         }
         return false;
     }
-
+ 
     public function isRegistered()
     {
         $query = "SELECT userid FROM " . $this->table . " 
@@ -58,21 +58,23 @@ class User
         $query = 'INSERT INTO ' . $this->table . '
                     SET
                         email = :email,
-                        username= :email,
+                        username= :username,
                         password = :password,
-                        usertype= :usertype,
+                        user_type= :user_type,
                         updated_at = CURRENT_TIMESTAMP()';
         $stmt = $this->conn->prepare($query);
         $this->email = htmlspecialchars(strip_tags($this->email));
         $this->password = md5(htmlspecialchars(strip_tags($this->password)));
-        $this->fname = htmlspecialchars(strip_tags($this->fname));
-        $this->lname = htmlspecialchars(strip_tags($this->lname));
+        $this->username = htmlspecialchars(strip_tags($this->username));
         $stmt->bindParam(':email', $this->email);
+        $stmt->bindParam(':username', $this->username);
         $stmt->bindParam(':password', $this->password);
-        $stmt->bindParam(':usertype', $this->usertype);
+        $stmt->bindParam(':user_type', $this->user_type);
         try {
             if ($stmt->execute()) {
-                return true;
+                //$LAST_ID = $this->conn->lastInsertId();
+                //return $stmt->lastInsertId();
+                return $stmt;
             }
         } catch(Exception $e) {
             printf('Error: %s.\n', $e);
