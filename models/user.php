@@ -118,6 +118,15 @@ class User
         return $stmt;
     }
 
+    public function getSingleUserById()
+    {
+        $query = "SELECT * FROM " . $this->table . " WHERE userid = :userid";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":userid", $this->userid);
+        $stmt->execute();
+        return $stmt;
+    }
+
     public function updateUserDetails()
     {
         // $id = $_SESSION['id'];

@@ -29,6 +29,35 @@ class Principal
         $stmt->execute();
         return $stmt;
     }
+
+    //check if a principal is unassigned 
+    public function isPrincipalUnassigned()
+    {
+        $query = 'SELECT *
+                    FROM ' . $this->table .'
+                    WHERE madrasa_id = 0
+                    AND id = :id
+                    ';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $this->id);
+        $stmt->execute();
+        return $stmt;
+    }
+
+
+//GET All Unassigned Principals
+
+    public function getUnassignedPrincipals()
+    {
+        $query = 'SELECT *
+                    FROM ' . $this->table .'
+                    WHERE madrasa_id = 0
+                    ';
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt;
+    }
+
 // GET SINGLE Principal BY ID
     public function getSinglePrincipalById()
     {
@@ -42,6 +71,35 @@ class Principal
         $stmt->execute();
         return $stmt;
     }
+
+// GET SINGLE Principal BY Madrasa ID
+public function getSinglePrincipalByMadrasaId()
+{
+    $query = 'SELECT 
+                *
+                FROM ' . $this->table . ' 
+                    WHERE 
+                    madrasa_id = :madrasa_id';
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':madrasa_id', $this->madrasa_id);
+    $stmt->execute();
+    return $stmt;
+}
+
+// GET SINGLE Principal BY Madrasa ID
+public function getSinglePrincipalTitleByMadrasaId()
+{
+    $query = 'SELECT 
+                title
+                FROM ' . $this->table . ' 
+                    WHERE 
+                    madrasa_id = :madrasa_id';
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':madrasa_id', $this->madrasa_id);
+    $stmt->execute();
+    return $stmt;
+}
+
 
 //add principal to db
 
@@ -74,6 +132,56 @@ public function addPrincipal()
         printf('Error: %s.\n', $stmt->error);
         return false;
     }
+
+public function assignPrincipalToMadrasa()
+    {
+    $query = "UPDATE " . $this->table . " 
+    SET 
+        madrasa_id = :madrasa_id 
+        WHERE 
+            id = :id 
+            ";
+$stmt = $this->conn->prepare($query);
+$stmt->bindParam(":madrasa_id", $this->madrasa_id);
+$stmt->bindParam(":id", $this->id);
+try {
+    if ($stmt->execute()) {
+        return true;
+    }
+} catch (Exception $e) {
+    printf('Exception: %s.\n', $e);
+    return false;
+}
+printf('Error: %s.\n', $stmt->error);
+return false;
+
+    }
+
+public function unassignPrincipalFromMadrasa()
+    {
+    $query = "UPDATE " . $this->table . " 
+    SET 
+        madrasa_id = 0 
+        WHERE 
+            id = :id 
+            ";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(":id", $this->id);
+            try {
+                if ($stmt->execute()) {
+                    return true;
+                }
+            } catch (Exception $e) {
+                printf('Exception: %s.\n', $e);
+                return false;
+            }
+            printf('Error: %s.\n', $stmt->error);
+            return false;
+            
+    }
+
+
+
 
 
 

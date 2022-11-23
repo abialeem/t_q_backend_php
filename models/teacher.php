@@ -31,6 +31,20 @@ class Teacher
         $stmt->execute();
         return $stmt;
     }
+
+//GET All Unassigned Teachers
+
+public function getUnassignedTeachers()
+{
+    $query = 'SELECT *
+                FROM ' . $this->table .'
+                WHERE madrasa_id = 0
+                ';
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    return $stmt;
+}
+
 // GET SINGLE Teacher BY ID
     public function getSingleTeacherById()
     {
@@ -44,6 +58,20 @@ class Teacher
         $stmt->execute();
         return $stmt;
     }
+
+// GET All Teachers BY Madrasa ID
+public function getTeachersByMadrasaId()
+{
+    $query = 'SELECT 
+                *
+                FROM ' . $this->table . ' 
+                    WHERE 
+                        madrasa_id = :madrasa_id';
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':madrasa_id', $this->madrasa_id);
+    $stmt->execute();
+    return $stmt;
+}
 
 //get teacher title
     public function getTeacherTitle()
@@ -238,6 +266,72 @@ public function updateTeacherCoursesSubjectsCount()
         printf('Error: %s.\n', $stmt->error);
         return false;
     }
+
+ //check if a teacher is unassigned 
+ public function isTeacherUnassigned()
+ {
+     $query = 'SELECT *
+                 FROM ' . $this->table .'
+                 WHERE madrasa_id = 0
+                 AND id = :id
+                 ';
+     $stmt = $this->conn->prepare($query);
+     $stmt->bindParam(':id', $this->id);
+     $stmt->execute();
+     return $stmt;
+ }
+
+    // assign teacher to a madrasa
+    public function assignTeacherToMadrasa()
+    {
+    $query = "UPDATE " . $this->table . " 
+    SET 
+        madrasa_id = :madrasa_id 
+        WHERE 
+            id = :id 
+            ";
+$stmt = $this->conn->prepare($query);
+$stmt->bindParam(":madrasa_id", $this->madrasa_id);
+$stmt->bindParam(":id", $this->id);
+try {
+    if ($stmt->execute()) {
+        return true;
+    }
+} catch (Exception $e) {
+    printf('Exception: %s.\n', $e);
+    return false;
+}
+printf('Error: %s.\n', $stmt->error);
+return false;
+
+    } 
+
+
+
+  //unassign teacher from a madrasa   
+    public function unassignTeacherFromMadrasa()
+    {
+    $query = "UPDATE " . $this->table . " 
+    SET 
+        madrasa_id = 0 
+        WHERE 
+            id = :id 
+            ";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(":id", $this->id);
+            try {
+                if ($stmt->execute()) {
+                    return true;
+                }
+            } catch (Exception $e) {
+                printf('Exception: %s.\n', $e);
+                return false;
+            }
+            printf('Error: %s.\n', $stmt->error);
+            return false;
+            
+    }
+
 
 //delete a teacher
     public function deleteTeacher()

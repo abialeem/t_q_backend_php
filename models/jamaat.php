@@ -38,6 +38,20 @@ public function getSingleJamaatById()
     return $stmt;
 }
 
+// GET SINGLE Jamaat's Title BY ID
+public function getJamaatTitle()
+{
+    $query = 'SELECT 
+                jamaat
+                FROM ' . $this->table . ' 
+                    WHERE 
+                        id = :id';
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':id', $this->id);
+    $stmt->execute();
+    return $stmt;
+}
+
 
 }
 

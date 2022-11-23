@@ -30,6 +30,20 @@ public function getAllStudents()
     $stmt->execute();
     return $stmt;
 }
+
+//GET All Unassigned Students
+
+public function getUnassignedStudents()
+{
+    $query = 'SELECT *
+                FROM ' . $this->table .'
+                WHERE madrasa_id = 0
+                ';
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    return $stmt;
+}
+
 // GET SINGLE Student BY ID
 public function getSingleStudentById()
 {
@@ -40,6 +54,20 @@ public function getSingleStudentById()
                         id = :id';
     $stmt = $this->conn->prepare($query);
     $stmt->bindParam(':id', $this->id);
+    $stmt->execute();
+    return $stmt;
+}
+
+// GET All Students BY Madrasa ID
+public function getStudentsByMadrasaId()
+{
+    $query = 'SELECT 
+                *
+                FROM ' . $this->table . ' 
+                    WHERE 
+                        madrasa_id = :madrasa_id';
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':madrasa_id', $this->madrasa_id);
     $stmt->execute();
     return $stmt;
 }
@@ -100,6 +128,69 @@ public function addStudent()
         return false;
     }
 
+
+       // assign student to a madrasa
+ public function assignStudentToMadrasa()
+       {
+       $query = "UPDATE " . $this->table . " 
+       SET 
+           madrasa_id = :madrasa_id 
+           WHERE 
+               id = :id 
+               ";
+   $stmt = $this->conn->prepare($query);
+   $stmt->bindParam(":madrasa_id", $this->madrasa_id);
+   $stmt->bindParam(":id", $this->id);
+   try {
+       if ($stmt->execute()) {
+           return true;
+       }
+   } catch (Exception $e) {
+       printf('Exception: %s.\n', $e);
+       return false;
+   }
+   printf('Error: %s.\n', $stmt->error);
+   return false;
+   
+       } 
+   
+   //check if a student is unassigned 
+ public function isStudentUnassigned()
+ {
+     $query = 'SELECT *
+                 FROM ' . $this->table .'
+                 WHERE madrasa_id = 0
+                 AND id = :id
+                 ';
+     $stmt = $this->conn->prepare($query);
+     $stmt->bindParam(':id', $this->id);
+     $stmt->execute();
+     return $stmt;
+ }
+   
+     //unassign student from a madrasa   
+       public function unassignStudentFromMadrasa()
+       {
+       $query = "UPDATE " . $this->table . " 
+       SET 
+           madrasa_id = 0 
+           WHERE 
+               id = :id 
+               ";
+               $stmt = $this->conn->prepare($query);
+               $stmt->bindParam(":id", $this->id);
+               try {
+                   if ($stmt->execute()) {
+                       return true;
+                   }
+               } catch (Exception $e) {
+                   printf('Exception: %s.\n', $e);
+                   return false;
+               }
+               printf('Error: %s.\n', $stmt->error);
+               return false;
+               
+       }
 
 
 }

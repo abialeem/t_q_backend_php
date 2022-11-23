@@ -38,6 +38,19 @@ public function getSingleJamiatById()
     return $stmt;
 }
 
+// GET SINGLE Jamiat's Title BY ID
+public function getJamiatTitle()
+{
+    $query = 'SELECT 
+                jamiat
+                FROM ' . $this->table . ' 
+                    WHERE 
+                        id = :id';
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':id', $this->id);
+    $stmt->execute();
+    return $stmt;
+}
 
 }
 

@@ -106,35 +106,88 @@ public function addMadrasa()
     return false;
 }
 
+    //increment teacher count
+public function incrementTeacherCount(){
+    $query = "UPDATE " . $this->table . " 
+    SET 
+    madrasa_teacher_count = madrasa_teacher_count + 1, 
+        updated_at = CURRENT_TIMESTAMP() 
+            WHERE id = :id";
+$stmt = $this->conn->prepare($query);
+$stmt->bindParam(":id", $this->id);
+try {
+if ($stmt->execute()) {
+return true;
+}
+} catch(Exception $e) {
+printf('Exception: %s.\n', $e);
+return false;
+}
+printf('Error: %s.\n', $stmt->error);
+return false;
+}
 
-
-// GET SINGLE Madrasa Principal BY Madrasa ID
-    public function getMadrasaPrincipal(){
-        $query = 'SELECT * FROM principals WHERE madrasa_id = :id  ';
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':id', $this->id);
-        $stmt->execute();
-        return $stmt;
+    //increment teacher count
+public function decrementTeacherCount(){
+        $query = "UPDATE " . $this->table . " 
+        SET 
+        madrasa_teacher_count = madrasa_teacher_count - 1, 
+            updated_at = CURRENT_TIMESTAMP() 
+                WHERE id = :id";
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(":id", $this->id);
+    try {
+    if ($stmt->execute()) {
+    return true;
+    }
+    } catch(Exception $e) {
+    printf('Exception: %s.\n', $e);
+    return false;
+    }
+    printf('Error: %s.\n', $stmt->error);
+    return false;
     }
 
-// GET SINGLE Madrasa Teachers BY Madrasa ID
-public function getMadrasaTeachers(){
-    $query = 'SELECT * FROM teachers WHERE madrasa_id = :id  ';
+    //increment student count
+public function incrementStudentCount(){
+        $query = "UPDATE " . $this->table . " 
+        SET 
+        madrasa_student_count = madrasa_student_count + 1, 
+            updated_at = CURRENT_TIMESTAMP() 
+                WHERE id = :id";
     $stmt = $this->conn->prepare($query);
-    $stmt->bindParam(':id', $this->id);
-    $stmt->execute();
-    return $stmt;
+    $stmt->bindParam(":id", $this->id);
+    try {
+    if ($stmt->execute()) {
+    return true;
+    }
+    } catch(Exception $e) {
+    printf('Exception: %s.\n', $e);
+    return false;
+    }
+    printf('Error: %s.\n', $stmt->error);
+    return false;
+    }
+
+   //decrement student count
+public function decrementStudentCount(){
+    $query = "UPDATE " . $this->table . " 
+    SET 
+    madrasa_student_count = madrasa_student_count - 1, 
+        updated_at = CURRENT_TIMESTAMP() 
+            WHERE id = :id";
+$stmt = $this->conn->prepare($query);
+$stmt->bindParam(":id", $this->id);
+try {
+if ($stmt->execute()) {
+return true;
 }
-
-// GET SINGLE Madrasa Students BY Madrasa ID
-public function getMadrasaStudents(){
-    $query = 'SELECT * FROM students WHERE madrasa_id = :id  ';
-    $stmt = $this->conn->prepare($query);
-    $stmt->bindParam(':id', $this->id);
-    $stmt->execute();
-    return $stmt;
+} catch(Exception $e) {
+printf('Exception: %s.\n', $e);
+return false;
 }
-
-
+printf('Error: %s.\n', $stmt->error);
+return false;
+}
 
 }
