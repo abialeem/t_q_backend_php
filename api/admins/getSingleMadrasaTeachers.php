@@ -59,42 +59,6 @@ if (isset($madrasa_id)) {
                                             
                       }
                       
-                     //echo json_encode($teacher_arr);
-
-        // $teacher->madrasa_id = $madrasa_id;
-
-        // $result = $teacher->getTeachersByMadrasaId();
-        // $row_count = $result->rowCount();
-
-
-        // $teacher_arr= array();
-        // $teacher_arr['data'] = array();
-        // if ($row_count > 0) {
-            
-        //     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        //          extract($row);
-        //         $teacher = array(
-        //             'id' => $id,
-        //             'title' => $title,
-        //             'madrasa_id' => $madrasa_id,
-        //             'address' => $address,
-        //             'courses_count' => $courses_count,
-        //             'subjects_count' => $subjects_count,
-        //             'status' => $status
-        //         );
-                
-        //         array_push($teacher_arr['data'], $teacher);
-               
-        //     }
-
-        //     // echo json_encode($teacher_arr);
-
-        // } else {
-        //     //http_response_code(404);
-        //     echo json_encode(
-        //         array('message' => 'No teachers to be found')
-        //     );
-        // }
         
     }
 
