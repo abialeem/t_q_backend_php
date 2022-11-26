@@ -34,6 +34,7 @@ if (isset($data->title) && isset($data->description) && isset($data->course_id) 
         $quiz->serial_no = $data->serial_no;
         $quiz->question_count = 0;
         $quiz->attachment_count = 0;
+        $quiz->status = 1;
 
        
             $result = $quiz->quizExists();

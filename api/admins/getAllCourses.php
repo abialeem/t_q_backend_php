@@ -26,6 +26,7 @@ if ($row_count > 0) {
             'course_type' => $course_type,
             'skill_level' => $skill_level,
             'language' => $language,
+            'subjects_count' => $subjects_count,
             'status' => $status,
             );
         array_push($course_arr['data'], $course);

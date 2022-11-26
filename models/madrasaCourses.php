@@ -1,77 +1,79 @@
 <?php
-class TeacherMadrasas
+class MadrasaCourses
 {
     private $conn;
-    private $table = 'teacher_madrasas';
+    private $table = 'madrasa_courses';
 
     public $id;
-    public $teacher_id;
     public $madrasa_id;
-    public $assigned_at;
+    public $course_id;
+    public $created_at;
+    public $updated_at;
+    public $deleted_at;
 
     public function __construct($db)
     {
         $this->conn = $db;
     }
 
-    //GET Single Teacher's Madrasas
+    //GET Single Madrasa's Courses
 
-public function getSingleTeacherMadrasas()
+public function getSingleMadrasaCourses()
 {
-    $query = 'SELECT madrasa_id
+    $query = 'SELECT course_id
                 FROM ' . $this->table .'
-                WHERE teacher_id = :teacher_id
+                WHERE madrasa_id = :madrasa_id
                 ';
     $stmt = $this->conn->prepare($query);
-    $stmt->bindParam(':teacher_id', $this->teacher_id);
+    $stmt->bindParam(':madrasa_id', $this->madrasa_id);
     $stmt->execute();
     return $stmt;
 }
 
-    //GET Single Madrasa's Teachers
+    //GET Single Course's Madrasas
 
-public function getSingleMadrasaTeachers()
+public function getSingleCourseMadrasas()
 {
-        $query = 'SELECT teacher_id
+        $query = 'SELECT madrasa_id
                     FROM ' . $this->table .'
-                    WHERE madrasa_id = :madrasa_id
+                    WHERE course_id = :course_id
                     ';
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':madrasa_id', $this->madrasa_id);
+        $stmt->bindParam(':course_id', $this->course_id);
         $stmt->execute();
         return $stmt;
 }
 
-//check if teacher madrasa pair exists
-public function teacherAssignedToMadrasa()
+//check if  madrasa course pair exists
+public function courseAssignedToMadrasa()
 {
     $query = 'SELECT *
     FROM ' . $this->table .'
     WHERE madrasa_id = :madrasa_id
-    AND teacher_id = :teacher_id
+    AND course_id = :course_id
     ';
     $stmt = $this->conn->prepare($query);
     $stmt->bindParam(':madrasa_id', $this->madrasa_id);
-    $stmt->bindParam(':teacher_id', $this->teacher_id);
+    $stmt->bindParam(':course_id', $this->course_id);
     $stmt->execute();
     return $stmt;
 
 }
 
 
-    //Assign Teacher To Madrasa 
-public function assignTeacherToMadrasa()
+    //Assign Course To Madrasa 
+public function assignCourseToMadrasa()
 {
     $query = 'INSERT INTO ' . $this->table . '
                     SET
-                        teacher_id = :teacher_id,
+                        course_id = :course_id,
                         madrasa_id = :madrasa_id,
-                        assigned_at = CURRENT_TIMESTAMP()
+                        created_at = CURRENT_TIMESTAMP()
                         ';
         $stmt = $this->conn->prepare($query);
-        $this->teacher_id = htmlspecialchars(strip_tags($this->teacher_id));
+        $this->course_id = htmlspecialchars(strip_tags($this->course_id));
         $this->madrasa_id = htmlspecialchars(strip_tags($this->madrasa_id));
-        $stmt->bindParam(':teacher_id', $this->teacher_id);
+        $stmt->bindParam(':course_id', $this->course_id);
         $stmt->bindParam(':madrasa_id', $this->madrasa_id);
         try {
             if ($stmt->execute()) {
@@ -85,15 +87,15 @@ public function assignTeacherToMadrasa()
         return false;
 }
 
-    //Unassign teacher madrasa entry
-public function unassignTeacherFromMadrasa()
+    //Unassign course madrasa entry
+public function unassignCourseFromMadrasa()
 {
     $query = "DELETE FROM " . $this->table . " 
     WHERE 
-        teacher_id = :teacher_id 
+        course_id = :course_id 
         AND madrasa_id = :madrasa_id";
     $stmt = $this->conn->prepare($query);
-    $stmt->bindParam(":teacher_id", $this->teacher_id);
+    $stmt->bindParam(":course_id", $this->course_id);
     $stmt->bindParam(":madrasa_id", $this->madrasa_id);
     $stmt->execute();
     return $stmt;

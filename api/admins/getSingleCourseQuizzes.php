@@ -7,7 +7,13 @@ header('Content-Type: application/json');
 
 
 include_once('../../core/initialize.php');
+include_once '../../models/quiz.php';
+include_once '../../models/topic.php';
 include_once '../../models/subject.php';
+
+$quiz = new Quiz($db);
+
+$topic = new Topic($db);
 
 $subject = new Subject($db);
 
@@ -21,40 +27,56 @@ if (isset($course_id)) {
         );
     } else {
 
-        $subject->course_id = $course_id;
+        $quiz->course_id = $course_id;
 
 
-        $result = $subject->getSingleCourseSubjects();
+        $result = $quiz->getSingleCourseQuizzes();
         $row_count = $result->rowCount();
         
-        $subject_arr = array();
-        $subject_arr['data'] = array();
+        $quiz_arr = array();
+        $quiz_arr['data'] = array();
 
         if ($row_count > 0) {
             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 extract($row);
-                $subject = array(
+
+                $subject->id = $row['subject_id'];
+
+                $topic->id = $row['topic_id'];
+
+                $result2 = $subject->getSingleSubjectTitleById();
+                $subject_row = $result2->fetch(PDO::FETCH_ASSOC);
+
+                $result3 = $topic->getSingleTopicTitleById();
+                $topic_row = $result3->fetch(PDO::FETCH_ASSOC);
+
+                $quiz = array(
                     'id' => $id,
                     'title' => $title,
                     'description' => $description,
+                    'topic_id' => $topic_id,
+                    'subject_id' => $subject_id,
                     'course_id' => $course_id,
+                    'subject_title' => $subject_row['title'],
+                    'topic_title' => $topic_row['title'],
                     'serial_no' => $serial_no,
-                    'topic_count' => $topic_count,
-                    'status' => $status
+                    'question_count' => $question_count,
+                    'attachment_count' => $attachment_count,
+                    'status' => $status,
                     );
-                array_push($subject_arr['data'], $subject);
+                array_push($quiz_arr['data'], $quiz);
             }
 
-            echo json_encode($subject_arr);
+            echo json_encode($quiz_arr);
 
         } else {
-            array_push($subject_arr['data'], 
+            array_push($quiz_arr['data'], 
             array(
                 'id' => 'null',
-                'title' => 'no subjects for this course present'
+                'title' => 'no quizs for this course present'
                 )
         );
-            echo json_encode($subject_arr);
+            echo json_encode($quiz_arr);
         }
 
 

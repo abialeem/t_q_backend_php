@@ -7,7 +7,10 @@ header('Content-Type: application/json');
 
 
 include_once('../../core/initialize.php');
+include_once '../../models/topic.php';
 include_once '../../models/subject.php';
+
+$topic = new Topic($db);
 
 $subject = new Subject($db);
 
@@ -21,40 +24,49 @@ if (isset($course_id)) {
         );
     } else {
 
-        $subject->course_id = $course_id;
+        $topic->course_id = $course_id;
 
 
-        $result = $subject->getSingleCourseSubjects();
+        $result = $topic->getSingleCourseTopics();
         $row_count = $result->rowCount();
         
-        $subject_arr = array();
-        $subject_arr['data'] = array();
+        $topic_arr = array();
+        $topic_arr['data'] = array();
 
         if ($row_count > 0) {
             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 extract($row);
-                $subject = array(
+
+                    $subject->id = $row['subject_id'];
+
+                    $result2 = $subject->getSingleSubjectTitleById();
+                    $subject_row = $result2->fetch(PDO::FETCH_ASSOC);
+
+                $topic = array(
                     'id' => $id,
                     'title' => $title,
                     'description' => $description,
+                    'subject_id' => $subject_id,
+                    'subject_title' => $subject_row['title'],
                     'course_id' => $course_id,
                     'serial_no' => $serial_no,
-                    'topic_count' => $topic_count,
-                    'status' => $status
+                    'video_count' => $video_count,
+                    'quiz_count' => $quiz_count,
+                    'status' => $status,
                     );
-                array_push($subject_arr['data'], $subject);
+                array_push($topic_arr['data'], $topic);
             }
 
-            echo json_encode($subject_arr);
+            echo json_encode($topic_arr);
 
         } else {
-            array_push($subject_arr['data'], 
+            array_push($topic_arr['data'], 
             array(
                 'id' => 'null',
-                'title' => 'no subjects for this course present'
+                'title' => 'no topics for this course present'
                 )
         );
-            echo json_encode($subject_arr);
+            echo json_encode($topic_arr);
         }
 
 

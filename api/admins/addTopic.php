@@ -14,7 +14,7 @@ include_once '../../models/subject.php';
 
 $topic= new Topic($db);
 
-$subject = new Subject($db);
+$subject = new Subject($db); 
 
 $data = json_decode(file_get_contents("php://input"));
 
@@ -32,7 +32,7 @@ if (isset($data->title) && isset($data->description) && isset($data->course_id) 
         $topic->serial_no = $data->serial_no;
         $topic->video_count = 0;
         $topic->quiz_count = 0;
-       
+        $topic->status = 1;
             $result = $topic->topicExists();
             $row_count = $result->rowCount();
             if ($row_count > 0) {

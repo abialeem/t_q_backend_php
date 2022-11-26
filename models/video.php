@@ -13,6 +13,7 @@ class Video
     public $topic_id;
     public $subject_id;
     public $course_id;
+    public $status;
     public $created_at;
     public $updated_at;
     public $deleted_at;
@@ -36,6 +37,65 @@ public function getSingleVideoById()
 {
     $query = 'SELECT 
                 *
+                FROM ' . $this->table . ' 
+                    WHERE 
+                        id = :id';
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':id', $this->id);
+    $stmt->execute();
+    return $stmt;
+}
+
+//Get All videos of a single course_id
+public function getSingleCourseVideos()
+{
+    $query = 'SELECT 
+    *
+    FROM ' . $this->table . ' 
+        WHERE 
+            course_id = :course_id ORDER BY serial_no';
+$stmt = $this->conn->prepare($query);
+$stmt->bindParam(':course_id', $this->course_id);
+$stmt->execute();
+return $stmt;
+
+}
+
+//Get All videos of a single subject_id
+public function getSingleSubjectVideos()
+{
+    $query = 'SELECT 
+    *
+    FROM ' . $this->table . ' 
+        WHERE 
+            subject_id = :subject_id ORDER BY serial_no';
+$stmt = $this->conn->prepare($query);
+$stmt->bindParam(':subject_id', $this->subject_id);
+$stmt->execute();
+return $stmt;
+
+}
+
+//Get All videos of a single topic_id
+public function getSingleTopicVideos()
+{
+    $query = 'SELECT 
+    *
+    FROM ' . $this->table . ' 
+        WHERE 
+            topic_id = :topic_id ORDER BY serial_no';
+$stmt = $this->conn->prepare($query);
+$stmt->bindParam(':topic_id', $this->topic_id);
+$stmt->execute();
+return $stmt;
+
+}
+
+// GET SINGLE Video Title BY ID
+public function getSingleVideoTitleById()
+{
+    $query = 'SELECT 
+                title
                 FROM ' . $this->table . ' 
                     WHERE 
                         id = :id';
@@ -122,7 +182,7 @@ public function getAllVideosSerialsByCourseIDSubjectIDTopicID(){
          course_id = :course_id
          AND subject_id = :subject_id
          AND topic_id = :topic_id
-        AND deleted_at IS NULL";
+        AND deleted_at IS NULL ORDER BY serial_no";
 $stmt = $this->conn->prepare($query);
 $this->course_id = htmlspecialchars(strip_tags($this->course_id));
 $this->subject_id = htmlspecialchars(strip_tags($this->subject_id));
@@ -135,6 +195,20 @@ return $stmt;
 
 }
 
+//get serial no's of videos of topic by topic id
+public function getAllVideosSerialsByTopicID(){
+
+    $query = "SELECT serial_no FROM " . $this->table . " 
+    WHERE 
+         topic_id = :topic_id
+        AND deleted_at IS NULL ORDER BY serial_no";
+$stmt = $this->conn->prepare($query);
+$this->topic_id = htmlspecialchars(strip_tags($this->topic_id));
+$stmt->bindParam(':topic_id', $this->topic_id);
+$stmt->execute();
+return $stmt;
+
+}
 
 public function incrementAttachmentCount(){
     $query = "UPDATE " . $this->table . " 

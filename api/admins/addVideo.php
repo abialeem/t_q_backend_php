@@ -34,6 +34,7 @@ if (isset($data->title) && isset($data->description) && isset($data->course_id) 
         $video->serial_no = $data->serial_no;
         $video->video_src = $data->video_src;
         $video->attachment_count = 0;
+        $video->status = 1;
 
        
             $result = $video->videoExists();

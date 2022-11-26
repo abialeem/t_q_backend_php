@@ -10,6 +10,7 @@ class Subject
     public $course_id;
     public $serial_no;
     public $topic_count;
+    public $status;
     public $created_at;
     public $updated_at;
     public $deleted_at;
@@ -49,7 +50,7 @@ public function getSingleCourseSubjects()
     *
     FROM ' . $this->table . ' 
         WHERE 
-            course_id = :course_id';
+            course_id = :course_id ORDER BY serial_no ';
 $stmt = $this->conn->prepare($query);
 $stmt->bindParam(':course_id', $this->course_id);
 $stmt->execute();
@@ -57,6 +58,19 @@ return $stmt;
 
 }
 
+// GET SINGLE Subject Title BY ID
+public function getSingleSubjectTitleById()
+{
+    $query = 'SELECT 
+                title
+                FROM ' . $this->table . ' 
+                    WHERE 
+                        id = :id';
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':id', $this->id);
+    $stmt->execute();
+    return $stmt;
+}
 
 //get serials of a course's subjects by course id
 
@@ -65,7 +79,7 @@ public function getAllSubjectsSerialsByCourseID(){
     $query = "SELECT serial_no FROM " . $this->table . " 
     WHERE 
          course_id = :course_id
-        AND deleted_at IS NULL";
+        AND deleted_at IS NULL ORDER BY serial_no";
 $stmt = $this->conn->prepare($query);
 $this->course_id = htmlspecialchars(strip_tags($this->course_id));
 $stmt->bindParam(':course_id', $this->course_id);

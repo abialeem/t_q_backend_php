@@ -7,9 +7,18 @@ header('Content-Type: application/json');
 
 
 include_once('../../core/initialize.php');
+include_once '../../models/topic.php';
+include_once '../../models/subject.php';
+include_once '../../models/course.php';
 include_once '../../models/video.php';
 
 $video = new Video($db);
+
+$topic = new Topic($db);
+
+$subject = new Subject($db);
+
+$course = new Course($db);
 
 $result = $video->getAllVideos();
 $row_count = $result->rowCount();
@@ -19,16 +28,33 @@ if ($row_count > 0) {
     $video_arr['data'] = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         extract($row);
-        $video = array(
+
+        $course->id = $row['course_id'];
+        $subject->id = $row['subject_id'];
+        $topic->id = $row['topic_id'];
+        $result2 = $course->getSingleCourseTitleById();
+        $course_row = $result2->fetch(PDO::FETCH_ASSOC);
+
+        $result3 = $subject->getSingleSubjectTitleById();
+        $subject_row = $result3->fetch(PDO::FETCH_ASSOC);
+
+        $result4 = $topic->getSingleTopicTitleById();
+        $topic_row = $result4->fetch(PDO::FETCH_ASSOC);
+
+        $video = array( 
             'id' => $id,
             'title' => $title,
             'description' => $description,
             'topic_id' => $topic_id,
             'subject_id' => $subject_id,
             'course_id' => $course_id,
+            'course_title' => $course_row['title'],
+            'subject_title' => $subject_row['title'],
+            'topic_title' => $topic_row['title'],
             'serial_no' => $serial_no,
             'video_src' => $video_src,
             'attachment_count' => $attachment_count,
+            'status' => $status,
             );
         array_push($video_arr['data'], $video);
     }

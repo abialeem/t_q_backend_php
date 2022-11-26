@@ -10,6 +10,9 @@ include_once('../../core/initialize.php');
 include_once '../../models/topic.php';
 include_once '../../models/subject.php';
 include_once '../../models/course.php';
+include_once '../../models/video.php';
+
+$video = new Video($db);
 
 $topic = new Topic($db);
 
@@ -27,57 +30,64 @@ if (isset($subject_id)) {
         );
     } else {
 
-        $topic->subject_id = $subject_id;
+        $video->subject_id = $subject_id;
 
 
-        $result = $topic->getSingleSubjectTopics();
+        $result = $video->getSingleSubjectVideos();
         $row_count = $result->rowCount();
         
-        $topic_arr = array();
-        $topic_arr['data'] = array();
+        $video_arr = array();
+        $video_arr['data'] = array();
 
         if ($row_count > 0) {
             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 extract($row);
                 $course->id = $row['course_id'];
                 $subject->id = $row['subject_id'];
+                $topic->id = $row['topic_id'];
                 $result2 = $course->getSingleCourseTitleById();
                 $course_row = $result2->fetch(PDO::FETCH_ASSOC);
 
                 $result3 = $subject->getSingleSubjectTitleById();
                 $subject_row = $result3->fetch(PDO::FETCH_ASSOC);
-                $topic = array(
+
+                $result4 = $topic->getSingleTopicTitleById();
+                $topic_row = $result4->fetch(PDO::FETCH_ASSOC);
+
+                $video = array(
                     'id' => $id,
                     'title' => $title,
                     'description' => $description,
-                    'course_id' => $course_id,
+                    'topic_id' => $topic_id,
                     'subject_id' => $subject_id,
-                    'course_title' =>$course_row['title'],
-                    'subject_title' =>$subject_row['title'],
+                    'course_id' => $course_id,
+                    'course_title' => $course_row['title'],
+                    'subject_title' => $subject_row['title'],
+                    'topic_title' => $topic_row['title'],
                     'serial_no' => $serial_no,
-                    'video_count' => $video_count,
-                    'quiz_count' => $quiz_count,
+                    'video_src' => $video_src,
+                    'attachment_count' => $attachment_count,
                     'status' => $status,
                     );
-                array_push($topic_arr['data'], $topic);
+                array_push($video_arr['data'], $video);
             }
 
-            echo json_encode($topic_arr);
+            echo json_encode($video_arr);
 
         } else {
-            array_push($topic_arr['data'], 
+            array_push($video_arr['data'], 
             array(
                 'id' => 'null',
-                'title' => 'no topics for this subject present'
+                'title' => 'no video for this subject present'
                 )
         );
-            echo json_encode($topic_arr);
+            echo json_encode($video_arr);
         }
 
 
     }
 
- 
+
 }
 else {
     http_response_code(422);

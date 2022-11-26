@@ -14,7 +14,7 @@ $teacher = new Teacher($db);
 
 $teacher_madrasas = new TeacherMadrasas($db);
 
-$madrasa_id = isset($_GET['madrasa_id']) ?  $_GET['madrasa_id'] : 0;
+$madrasa_id = isset($_GET['madrasa_id']) ?  $_GET['madrasa_id'] : 0; 
 
 if (isset($madrasa_id)) {
 
@@ -43,6 +43,7 @@ if (isset($madrasa_id)) {
                                     $teacher->id = $madrasa_teacher_id;
                                     $result = $teacher->getSingleTeacherById();
                                     $row = $result->fetch(PDO::FETCH_ASSOC);
+                                    $row['madrasa_id'] = $madrasa_id;
                                     //         $teacher = array(
                                     //             'id' => $row['id'],
                                     //             'title' => $row['title'],
@@ -53,13 +54,14 @@ if (isset($madrasa_id)) {
                                     //             'status' => $row['status']
                                     //         );
                                             
-                                    //         array_push($teacher_arr['data'], $teacher);
+                                            array_push($teacher_arr['data'], $row);
                                            
-                                    echo json_encode($row);
+                                  
                                             
                       }
                       
-        
+                     
+                      echo json_encode($teacher_arr);
     }
 
 

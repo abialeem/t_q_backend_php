@@ -10,6 +10,7 @@ class Course
     public $course_type;
     public $skill_level;
     public $language;
+    public $subjects_count;
     public $status;
     public $created_at;
     public $updated_at;
@@ -19,7 +20,7 @@ class Course
     {
         $this->conn = $db;
     }
-
+ 
 // GET ALL Courses
 public function getAllCourses()
 {
@@ -34,6 +35,20 @@ public function getSingleCourseById()
 {
     $query = 'SELECT 
                 *
+                FROM ' . $this->table . ' 
+                    WHERE 
+                        id = :id';
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':id', $this->id);
+    $stmt->execute();
+    return $stmt;
+}
+
+// GET SINGLE Course Title BY ID
+public function getSingleCourseTitleById()
+{
+    $query = 'SELECT 
+                title
                 FROM ' . $this->table . ' 
                     WHERE 
                         id = :id';
@@ -94,6 +109,46 @@ public function addCourse()
     }
     printf('Error: %s.\n', $stmt->error);
     return false;
+}
+
+public function incrementSubjectCount(){
+    $query = "UPDATE " . $this->table . " 
+    SET 
+        subjects_count = subjects_count + 1, 
+        updated_at = CURRENT_TIMESTAMP() 
+            WHERE id = :id";
+$stmt = $this->conn->prepare($query);
+$stmt->bindParam(":id", $this->id);
+try {
+if ($stmt->execute()) {
+return true;
+}
+} catch(Exception $e) {
+printf('Exception: %s.\n', $e);
+return false;
+}
+printf('Error: %s.\n', $stmt->error);
+return false;
+}
+
+public function decrementSubjectCount(){
+    $query = "UPDATE " . $this->table . " 
+    SET 
+    subjects_count = subjects_count - 1, 
+        updated_at = CURRENT_TIMESTAMP() 
+            WHERE id = :id";
+$stmt = $this->conn->prepare($query);
+$stmt->bindParam(":id", $this->id);
+try {
+if ($stmt->execute()) {
+return true;
+}
+} catch(Exception $e) {
+printf('Exception: %s.\n', $e);
+return false;
+}
+printf('Error: %s.\n', $stmt->error);
+return false;
 }
 
 

@@ -10,8 +10,11 @@ header('Content-Type: application/json');
 
 include_once '../../core/initialize.php';
 include_once '../../models/subject.php';
-
+include_once '../../models/course.php';
+ 
 $subject= new Subject($db);
+
+$course = new Course($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
@@ -37,10 +40,21 @@ if (isset($data->title) && isset($data->description) && isset($data->course_id) 
                 );
             } else {
                 if ($subject->addSubject()) {
-                    http_response_code(201);
-                    echo json_encode(
+                    //increment subject count of course_id
+                    $course->id = $data->course_id;
+                    if ($course->incrementSubjectCount()) {
+                        http_response_code(201);
+                        echo json_encode(
                         array('message' => 'Subject Added successfully')
-                    );
+                         );
+                    }
+                    else{
+                        http_response_code(201);
+                        echo json_encode(
+                            array('message' => 'Subject Added successfully but error in subject_count')
+                        );
+
+                    }
                 } else {
                     http_response_code(500);
                     echo json_encode(
