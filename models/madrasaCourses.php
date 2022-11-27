@@ -68,11 +68,12 @@ public function assignCourseToMadrasa()
                     SET
                         course_id = :course_id,
                         madrasa_id = :madrasa_id,
+                        updated_at = CURRENT_TIMESTAMP(),
                         created_at = CURRENT_TIMESTAMP()
                         ';
         $stmt = $this->conn->prepare($query);
-        $this->course_id = htmlspecialchars(strip_tags($this->course_id));
-        $this->madrasa_id = htmlspecialchars(strip_tags($this->madrasa_id));
+        // $this->course_id = htmlspecialchars(strip_tags($this->course_id));
+        // $this->madrasa_id = htmlspecialchars(strip_tags($this->madrasa_id));
         $stmt->bindParam(':course_id', $this->course_id);
         $stmt->bindParam(':madrasa_id', $this->madrasa_id);
         try {

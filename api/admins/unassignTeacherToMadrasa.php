@@ -75,56 +75,7 @@ if (isset($data->id) && isset($data->madrasa_id) ) {
                                                     );
                                     }       // else block ends  for unassignTeacherFromMadrasa  here
 
-
                     }
-        //old way of unassigning a teacher starts here before version 3.3
-
-//         $teacher->id = $data->id;
-
-//         $madrasa->id = $data->madrasa_id;
-        
-//   //check if teacher is already unassigned
-//         $result_check = $teacher->isTeacherUnassigned();
-//         $check_row_count = $result_check->rowCount();
-//         if($check_row_count > 0)
-//          {      //row count for isTeacherUnassigned starts here
-//             http_response_code(201);
-//             echo json_encode(
-//                 array('message' => 'Teacher already unassigned.')
-//             );
-
-//          }      //row count for isTeacherUnassigned ends here
-//         else{       //else block for row count for isTeacherUnassigned starts here 
-
-//                     //teacher is not already unassigned so unassign it
-//                     if($teacher->unassignTeacherFromMadrasa())
-//          {      //if block for unassignTeacherFromMadrasa starts here
-//                 //decrement teacher count of given madrasa
-//                 if($madrasa->decrementTeacherCount())
-//                 {
-//                     http_response_code(201);
-//                     echo json_encode(
-//                             array('message' => 'teacher Unassigned From Madrasa successfully')
-//                                     );
-//                 }
-//                 else{
-//                     http_response_code(201);
-//                         echo json_encode( 
-//                             array('message' => 'teacher  unassigned but error in teacher count of madrasa.')
-//                         );
-//                 }
-
-//         } else {  // else block starts  for unassignTeacherFromMadrasa  here
-//                         http_response_code(500);
-//                         echo json_encode(
-//                             array('message' => 'teacher could not be unassigned.')
-//                         );
-//         }       // else block ends  for unassignTeacherFromMadrasa  here
-
-//         }  //else block for row count for isTeacherUnassigned ends here 
-
-        //old way of unassigning a teacher ends here before version 3.3
-        
     }
 } else {
     http_response_code(422);
