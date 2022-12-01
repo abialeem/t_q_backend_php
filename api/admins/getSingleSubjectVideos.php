@@ -66,6 +66,7 @@ if (isset($subject_id)) {
                     'topic_title' => $topic_row['title'],
                     'serial_no' => $serial_no,
                     'video_src' => $video_src,
+                    'video_id' => $video_id,
                     'attachment_count' => $attachment_count,
                     'status' => $status,
                     );

@@ -9,6 +9,7 @@ class Video
     public $description;
     public $serial_no;
     public $video_src;
+    public $video_id;
     public $attachment_count;
     public $topic_id;
     public $subject_id;
@@ -142,6 +143,7 @@ public function addVideo()
                 serial_no = :serial_no,
                 attachment_count  = :attachment_count,
                 video_src = :video_src,
+                video_id = :video_id,
                 updated_at = CURRENT_TIMESTAMP()';
     $stmt = $this->conn->prepare($query);
         $this->title = htmlspecialchars(strip_tags($this->title));
@@ -160,6 +162,7 @@ public function addVideo()
         $stmt->bindParam(':serial_no', $this->serial_no);
         $stmt->bindParam(':attachment_count', $this->attachment_count);
         $stmt->bindParam(':video_src', $this->video_src);
+        $stmt->bindParam(':video_id', $this->video_id);
        
     try {
         if ($stmt->execute()) {

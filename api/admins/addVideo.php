@@ -19,8 +19,8 @@ $video = new Video($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
-if (isset($data->title) && isset($data->description) && isset($data->course_id) && isset($data->subject_id) && isset($data->topic_id) && isset($data->serial_no) && isset($data->video_src) ) {
-    if (empty($data->title) || empty($data->description) || empty($data->course_id) || empty($data->subject_id) || empty($data->serial_no) || empty($data->topic_id) || empty($data->video_src) ) {
+if (isset($data->title) && isset($data->description) && isset($data->course_id) && isset($data->subject_id) && isset($data->topic_id) && isset($data->serial_no) && isset($data->video_src) && isset($data->video_id) ) {
+    if (empty($data->title) || empty($data->description) || empty($data->course_id) || empty($data->subject_id) || empty($data->serial_no) || empty($data->topic_id) || empty($data->video_src) || empty($data->video_id)  ) {
         http_response_code(422);
         echo json_encode(
             array('message' => 'Please enter all the required fields to add a video')
@@ -33,6 +33,7 @@ if (isset($data->title) && isset($data->description) && isset($data->course_id) 
         $video->topic_id = $data->topic_id;
         $video->serial_no = $data->serial_no;
         $video->video_src = $data->video_src;
+        $video->video_id = $data->video_id;
         $video->attachment_count = 0;
         $video->status = 1;
 
